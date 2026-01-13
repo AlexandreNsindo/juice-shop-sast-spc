@@ -1,0 +1,23 @@
+name: SAST SonarQube Analysis on Push/PR
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  sonar-scan:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: SonarQube Scan
+      uses: SonarSource/sonarqube-scan-action@v2
+      env:
+        SONAR_TOKEN: ${{ sqp_7fe5436945332f67115a5b809b360aebcacab239 }}
+        SONAR_HOST_URL: ${{ http://localhost:9000 }}
+    - name: SonarQube Quality Gate check
+      uses: SonarSource/sonarqube-quality-gate-action@v2
+      timeout-minutes: 5
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
